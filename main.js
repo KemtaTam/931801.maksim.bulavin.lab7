@@ -1,95 +1,51 @@
-class Drawer {
-    constructor(){
-        this._body = document.querySelector('body');
-        this._body.innerHTML += `<div class="drawer hide"></div>`
-    }
-
-    show = (html) => {
-        let drawer = document.querySelector(".drawer");
-        drawer.innerHTML = html;
-        drawer.classList.remove("hide");
-        document.addEventListener('click', (e) => {
-            if(e.target.classList[0] === "drawer") this.hide(drawer);
-        })
-    }
-    
-    hide = (drawer) => drawer.classList.add("hide");
+const typesOfFigures = {
+    "Квадрат" : "rect",
+    "Треугольник" : "triangle",
+    "Круг" : "circle"
 }
 
-class News{
-    constructor(news){
-        if(news.length){
-            this.getNewId = this._createIdGenerator();
-            this._drawer = new Drawer;
-            this._news = news.map(n => {
-                return {
-                    id : this.getNewId(),
-                    title: n.title,
-                    text: n.text
-                }
-            })
-        }else console.error("not an array passed to the constructor")
-    }
+let selectedTargets = null;
 
-    _createIdGenerator = () => {
-        let id = 1;
-        return () => id++;
-    }
+const getRandomNum = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
-    open = (id) => {
-        let currentNew = this._news.find(n => n.id === id);
-        let html = `
-            <div class="drawer_new">
-                <div class="drawer_title" >
-                    <h4>
-                        ${currentNew.title}
-                    </h4>
-                </div>
+const addFiguresInHtml = (type, count) => {
+    let body = document.querySelector('body');
 
-                <div class="drawer_text" >
-                    ${currentNew.title + ": " + currentNew.text}
-                </div>
-            </div>
-        `;
-        this._drawer.show(html);
-    }
+    let size = getRandomNum(30, 300);
 
-    getHtml = () => this._news.map(n => `
-        <div class="new">
-            <div class="title">
-                <h4>${n.title}</h4>
-            </div>
+    for(let i = 0; i < count; i++){
+        let figure = document.createElement("div");
+        figure.classList.add(type);
 
-            <div class="text">
-                ${n.text}
-            </div>
+        figure.style.width = size + "px";
+        figure.style.height = size + "px";
 
-            <div class="action">
-                <button onclick="news.open(${n.id})">Открыть всплывающее окно</button>
-            </div>
-        </div>
-    `).join('')
+        let position = [getRandomNum(100, 1000),getRandomNum(200, 700)]
+        figure.style.left = position[0] + "px";
+        figure.style.top = position[1] + "px";
 
-    addNew = (n) => {
-        this._news.push({
-            id : this.getNewId(),
-            title: n.title,
-            text: n.text
+        figure.addEventListener('click', e => {
+            if(selectedTargets) selectedTargets.target.style.background = "";
+            
+            selectedTargets = {
+                target: e.target,
+                type
+            }
+            if(type === "triangle") e.target.style.background = "linear-gradient(to right bottom, transparent 50%, yellow 50%) left / 50% 100% no-repeat, linear-gradient(to left bottom, transparent 50%, yellow 50%) right / 50% 100% no-repeat";
+            else e.target.style.background = "yellow"
         })
-    }
 
-    deleteNew = (id) =>  this._news = this._news.filter(n => n.id !== id)
-    getNews = () => this._news
+        figure.addEventListener('dblclick', e => e.target.remove())
+
+        body.append(figure);
+    }
 }
 
-const myNews = [
-    {title:"Новость 1", text:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita amet sint harum officia veniam, illo ullam velit fuga atque explicabo a necessitatibus adipisci voluptate ipsam reiciendis quia unde ex? Explicabo necessitatibus illo nulla sequi at. Libero nam laudantium suscipit ipsum hic corrupti minus maxime, cumque consequatur aut ex tenetur voluptates?"},
-    {title:"Новость 2", text:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita amet sint harum officia veniam, illo ullam velit fuga atque explicabo a necessitatibus adipisci voluptate ipsam reiciendis quia unde ex? Explicabo necessitatibus illo nulla sequi at. Libero nam laudantium suscipit ipsum hic corrupti minus maxime, cumque consequatur aut ex tenetur voluptates?"},
-    {title:"Новость 3", text:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita amet sint harum officia veniam, illo ullam velit fuga atque explicabo a necessitatibus adipisci voluptate ipsam reiciendis quia unde ex? Explicabo necessitatibus illo nulla sequi at. Libero nam laudantium suscipit ipsum hic corrupti minus maxime, cumque consequatur aut ex tenetur voluptates?"}
-]
-
-let news = new News(myNews);
-news.addNew({title:"Новость 4", text:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita amet sint harum officia veniam, illo ullam velit fuga atque explicabo a necessitatibus adipisci voluptate ipsam reiciendis quia unde ex? Explicabo necessitatibus illo nulla sequi at. Libero nam laudantium suscipit ipsum hic corrupti minus maxime, cumque consequatur aut ex tenetur voluptates?"})
-news.deleteNew(3)
-
-document.querySelector(".news").innerHTML = news.getHtml();
+document.querySelectorAll('button').forEach(b => 
+    b.addEventListener('click',(e) => {
+        let count = document.querySelector('input').value;
+        let type = typesOfFigures[e.target.outerText];
+        
+        addFiguresInHtml(type, count);
+    })
+)
