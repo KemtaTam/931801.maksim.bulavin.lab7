@@ -1,70 +1,27 @@
 *{
     margin:0;
     padding:0;
+    font-size:20px;
     color:black;
     font-family: Arial, Helvetica, sans-serif;
 }
-.news{
-    width:100%;
-    
+.control{
+    margin:20px;
 }
-.new{
-    margin:0 auto;
-    width: 800px;
-    padding: 20px 25px;
-    background:rgb(182,245,245);
-    border-bottom: 2px solid black;
-}
-.new:hover{
-    background:rgb(255,85,85);
-}
-.title{
-    font-size:24px;
-}
-.text{
-    margin-top:10px;
-    font-size:16px;
-}
-.action{
-    width:100%;
-    margin-top:20px;
-    text-align: center;
-}
-.action button{
-    color:white;
-    padding:8px;
-    border:none;
-    cursor: pointer;
-    background:linear-gradient(to top, rgb(0,137,0),rgb(0,249,0));
-    box-shadow: 0 0 3px #000, inset 0 1px 2px -1px #fff;
-}
-
-
-
-.hide{
-    display:none;
-}
-.drawer{
+.rect{
     position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height: 100%;
-    background: rgb(255,255,255,0.7)
+    background:rgb(255,26,26,0.8);
+    border:1px solid black;
 }
-
-.drawer_new{
-    background:rgb(225,255,115);
-    width:500px;
-    height: auto;
-    padding:20px;
-    margin:300px auto;
+.circle{
+    position: absolute;
+    background:rgb(26,141,26,0.8);
+    border-radius: 100%;
+    border:1px solid black;
 }
-.drawer_title{
-    font-size:28px;
-    text-align: center;
-}
-.drawer_text{
-    margin-top:30px;
-    font-size:18px;
+.triangle{
+    position: absolute;
+    width:50px;
+    height: 50px;
+    background: linear-gradient(to right bottom, transparent 50%, red 50%) left / 50% 100% no-repeat, linear-gradient(to left bottom, transparent 50%, red 50%) right / 50% 100% no-repeat;
 }
